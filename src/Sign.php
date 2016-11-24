@@ -1,4 +1,5 @@
-<?php 
+<?php
+namespace shouyiren\helper; 
 /**
 * 简单md5签名
 */
