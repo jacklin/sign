@@ -1,5 +1,5 @@
 <?php
-namespace shouyiren\helper; 
+namespace Tool; 
 /**
 * 简单md5签名
 */
