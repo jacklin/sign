@@ -1,7 +1,7 @@
 <?php 
 require_once("../src/Sign.php");
 
-$s = new Sign("key");
+$s = new shouyiren\helper\Sign("key");
 $data = [
 	"name" => "Jon",
 	"age" => "32",
