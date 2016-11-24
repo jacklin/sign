@@ -1,1 +1,13 @@
-sign
+
+require_once("../src/Sign.php");
+
+$s = new Sign("key");
+$data = [
+	"name" => "Jon",
+	"age" => "32",
+	0 => "test"
+];
+echo $s->generateSign($data)
+echo "<br>";
+$data = json_encode($data);
+echo $s->generateSign($data);
