@@ -1,6 +1,11 @@
 {
     "name": "jacklin/sign",
     "description": "用于API通用签名类",
+    "license":				"Apache-2.0",
+    "type":				"library",
+    "keywords": [
+    	 "sign"
+    ],
     "authors": [
         {
             "name": "Lin Jiancheng",
