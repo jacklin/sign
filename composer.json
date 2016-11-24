@@ -1,0 +1,11 @@
+{
+    "name": "Jacklin/sign",
+    "description": "用于API通用签名类",
+    "authors": [
+        {
+            "name": "Lin Jiancheng",
+            "email": "jacklin@shouyiren.net"
+        }
+    ],
+    "require": {}
+}
