@@ -131,7 +131,7 @@ class Sign
 	 * @param    string                   $key [description]
 	 * @return   object                     返回当前对象;
 	 */
-	private function setKey($key=''){
+	public function setKey($key=''){
 		$this->key = $key;
 		return $this;
 	}
