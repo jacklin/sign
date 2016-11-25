@@ -1,4 +1,4 @@
-
+<?php
 require_once("../src/Sign.php");
 
 $s = new Sign("key");
@@ -11,3 +11,10 @@ echo $s->generateSign($data)
 echo "<br>";
 $data = json_encode($data);
 echo $s->generateSign($data);
+echo "<br>";
+
+//也支持链接调用
+
+$s = new Sign()
+echo $s->setKey("key")->generateSign($data);
+echo "<br>";

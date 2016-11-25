@@ -14,8 +14,8 @@ class Sign
 	//签名类型
 	private $signType = "MD5";
 
-	public function __construct($key){
-		$this->key = $key;
+	public function __construct($key=''){
+		$this->setKey($key);
 	}
 	/**
 	 * 生成签名
@@ -121,5 +121,18 @@ class Sign
 			return true;
 
 		return false;
+	}
+	/**
+	 * 设置签名密钥
+	 * BaZhang Platform
+	 * @Author   Jacklin@shouyiren.net
+	 * @DateTime 2016-11-25T15:54:04+0800
+	 * @version  [3.0.0]
+	 * @param    string                   $key [description]
+	 * @return   object                     返回当前对象;
+	 */
+	private function setKey($key=''){
+		$this->key = $key;
+		return $this;
 	}
 }
