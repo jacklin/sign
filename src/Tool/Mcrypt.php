@@ -55,11 +55,11 @@ class Mcrypt
           return $bindata;  
         }  
 
-  		public function setVi($iv){
+  		public function setIv($iv){
   			$this->iv = $iv;
   			return $this;
   		}
-  		public function getVi(){
+  		public function getIv(){
   			return $this->iv;
   		}
   		public function setKey($key){
