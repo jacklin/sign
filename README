@@ -18,3 +18,14 @@ echo "<br>";
 $s = new Sign()
 echo $s->setKey("key")->generateSign($data);
 echo "<br>";
+
+
+//加解密方法如下
+
+require_once("../src/Tool/Mcrypt.php");
+
+$m = new Tool\Mcrypt();
+$str = "Abc!@#$%Z^&*()_+{}|/`http:\/\/";
+echo $m->encrypt($str);
+echo "<br>";
+echo $m->decrypt($m->encrypt($str));

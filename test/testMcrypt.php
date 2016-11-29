@@ -2,7 +2,11 @@
 require_once("../src/Tool/Mcrypt.php");
 
 $m = new Tool\Mcrypt();
+$n = new Tool\Mcrypt();
 $str = "Abc!@#$%Z^&*()_+{}|/`http:\/\/";
-echo $m->encrypt($str);
+$iv = "0000000000000000";
+$key = "cccccccccccccccccccc";
+$enstr = $m->setVi($iv)->setKey($key)->encrypt($str);
+echo $enstr;
 echo "<br>";
-echo $m->decrypt($m->encrypt($str));
+echo $m->decrypt($enstr);
