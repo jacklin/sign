@@ -7,7 +7,7 @@ class EgodicFile
 {
 	
 	/**
-	 * 递归查找出当前目录下指定扩展名的文件路径，并保存至文件
+	 * 递归查找出当前目录下指定扩展名的文件路径
 	 * BaZhang Platform
 	 * @Author   Jacklin@shouyiren.net
 	 * @DateTime 2018-05-10T10:39:10+0800
