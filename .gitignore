@@ -1,1 +1,4 @@
 /vendor/
+test/vendor/
+test/composer.lock
+test/composer.json
