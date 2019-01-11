@@ -38,3 +38,16 @@ $s = new Tool\EgodicFile();
 $path = "/data/www/7723.com/bbs.7723.com";//查找当前目录下的
 $exclusions=['.','..','.git','.svn'];//过滤不查找目录 
 $s->find($path,['png','jpeg','jpg','bmp'],$exclusions);
+
+/**
+ * openssl加解密类
+ */
+require_once("../src/Tool/OpensslAes.php");
+$str = "test";
+//也可以设置加密密钥最长16位
+$key = '123456';
+Tool\OpensslAes::setKey($key);
+$encrypt_str = Tool\OpensslAes::encrypt($str);
+$decrypt_str = Tool\OpensslAes::decrypt($encrypt_str);
+echo $encrypt_str;
+echo $decrypt_str;
