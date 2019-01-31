@@ -51,3 +51,12 @@ $encrypt_str = Tool\OpensslAes::encrypt($str);
 $decrypt_str = Tool\OpensslAes::decrypt($encrypt_str);
 echo $encrypt_str;
 echo $decrypt_str;
+
+/**
+ * 日志分析
+ */
+require_once("../src/Tool/OpensslAes.php");
+$inputFile = '/usr/local/src/2019-01-30.log';//日志文件
+$outputFile = '/usr/local/src/2019-01-30.csv';//分析结果文件
+LogAnalysis::setFlowLine(4);//设置日志行流量的列数;默认为4
+$res = LogAnalysis::analysisLogFile($inputFile,$outputFile);
