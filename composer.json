@@ -13,7 +13,8 @@
         }
     ],
     "require": {
-    	"php": "^5.3.3 || ^7.1"
+    	"php": "^5.3.3 || ^7.1",
+        "php-curl-class/php-curl-class": "@dev"
     },
     "autoload": {
         "psr-0": {
@@ -21,6 +22,6 @@
         }
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.5"
+        "phpunit/phpunit": "^6.2"
     }
 }
