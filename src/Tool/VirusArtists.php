@@ -1,6 +1,7 @@
 <?php 
 namespace Tool; 
 use \Curl\Curl;
+use \Swoole\Process;
 /**
  * 
  */
@@ -62,20 +63,100 @@ class VirusAtrtists
 			return true;
 		}
 	}
-	private static function downFile($url,&$save_file){
+	/**
+	 * 下载文件
+	 * BaZhang Platform
+	 * @Author   Jacklin@shouyiren.net
+	 * @DateTime 2019-03-07T19:06:08+0800
+	 * @param    string                   $url        
+	 * @param    string                   &$save_file 文件下载后保存路径
+	 * @param    string                   $file_md5  文件md5值
+	 * @return   boolean                              
+	 */
+	private static function downFile($url,&$save_file,$file_md5=''){
 		$tmp_file_name = md5(substr(parse_url($url,PHP_URL_PATH),1));//临时文件
 		$curl = new curl();
 		$curl->setOpt(CURLOPT_FOLLOWLOCATION, true);
 		$save_file = self::$tmpPath.DIRECTORY_SEPARATOR.$tmp_file_name;
-		$curl->download($url, $save_file);
+		$res_download = $curl->download($url, $save_file);
 		unset($curl);
-		return true;
+		if ($res_download) {
+			$_file_md5 = file_md5($save_file);
+			if ($file_md5 == $_file_md5) {
+				return true;
+			}else{
+				return false;
+			}
+		}else{
+			return false;
+		}
 	}
-	public static function scanFile($filePath){
-
+	private static function runCmd($cmd,$args){
+		$process = new swoole_process(function($worker) use($cmd,$args){
+			$worker->exec($cmd,$args);
+		},true);
+		$pid = $process->start();
+		// swoole_event_add($process->pipe,function($pipe) use($process){echo $process->read();});
+		return $process->read();
+		// swoole_process::wait();
 	}
-	public static function scanUrlFile($url){
-
+	public static function scanFile($filePath,$isRemove=false){
+		$scan_list_file = $filePath.'.sca';
+		file_put_contents($scan_list_file, $filePath,FILE_APPEND);
+		$cmd = "/usr/local/clamav-0.101.1/bin/clamscan -f ".$scan_list_file."|grep ".$filePath;
+		$res= self::runCmd($cmd);
+		if ($res) {
+			@unlink($scan_list_file);
+			$isRemove?@nlink($filePath):'';
+		}
+		return $res
+	}
+	/**
+	 * 扫描提交的url文件
+	 * BaZhang Platform
+	 * @Author   Jacklin@shouyiren.net
+	 * @DateTime 2019-03-08T15:43:54+0800
+	 * @param    [type]                   $url 文件url例如：http://a.com/a.apk
+	 * @param    [type]                   $md5 文件md5默认为空
+	 * @return   [type]                        [description]
+	 */
+	public static function scanUrlFile($url,$md5=''){
+		$save_file='';
+		if(self::downFile($url,$save_file,$md5)){
+			$res_scan = self::scanFile($save_file);
+			return self::parseScanRes($res_scan);
+		}else{
+			throw new Exception("download: Error!");
+		}
+	}
+	/**
+	 * 解析扫描后返回的内容
+	 * BaZhang Platform
+	 * @Author   Jacklin@shouyiren.net
+	 * @DateTime 2019-03-08T15:41:53+0800
+	 * @param    [type]                   $context 例如：/usr/local/src/Thunder5.8.14.706(1).exe: Win.Trojan.Generic-6878759-0 FOUND
+	 * @return   array                           status：0-表示文件有病毒;1-表示文件没有问题;2-文件未知
+	 */
+	private static function parseScanRes($context){
+		strchr($context,'FOUND');
+		$arr_context = explode(" ",$context);
+		$status = end($arr_context);
+		$_res = [];
+		switch ($status) {
+			case 'OK':
+				$_res['status'] = 1;
+				$_res['description'] = "The file is safe!";
+				break;
+			case 'FOUND':
+				$_res['status'] = 0;
+				$_res['description'] = "The file is dangerous!";
+				break;
+			default:
+				$_res['status'] = 2;
+				$_res['description'] = "The file is unknown!";
+				break;
+		}
+		return $_res;
 	}
 
 }
