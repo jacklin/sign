@@ -118,7 +118,7 @@ class VirusArtists
 		$res = self::runCmd($cmd,$args);
 		if ($res) {
 			@unlink($scan_list_file);
-			$isRemove?@nlink($filePath):'';
+			$isRemove?@unlink($filePath):'';
 		}
 		return $res;
 	}
@@ -134,7 +134,7 @@ class VirusArtists
 	public static function scanUrlFile($url,$md5=''){
 		$save_file='';
 		if(self::downFile($url,$save_file,$md5)){
-			$res_scan = self::scanFile($save_file);
+			$res_scan = self::scanFile($save_file,true);
 			return self::parseScanRes($res_scan);
 		}else{
 			throw new \Exception("download: Error!");

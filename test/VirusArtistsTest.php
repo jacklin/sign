@@ -13,7 +13,5 @@ class VirusArtistsTest extends TestCase
 		VirusArtists::setTempPath(__dir__);
 		$res = VirusArtists::scanUrlFile($url);
 		$this->assertSame($res,['status'=>1,'description'=>"The file is safe!"]);
-
-		
 	}
 }
