@@ -91,7 +91,16 @@ class VirusAtrtists
 			return false;
 		}
 	}
-	private static function runCmd($cmd,$args){
+	/**
+	 * 执行系统命令
+	 * BaZhang Platform
+	 * @Author   Jacklin@shouyiren.net
+	 * @DateTime 2019-03-08T15:52:04+0800
+	 * @param    string                   $cmd  例如:/usr/local/clamav-0.101.1/bin/clamscan
+	 * @param    array                   $args ['-f']
+	 * @return   [type]                         返回执行结果
+	 */
+	private static function runCmd($cmd,$args=[]){
 		$process = new swoole_process(function($worker) use($cmd,$args){
 			$worker->exec($cmd,$args);
 		},true);
