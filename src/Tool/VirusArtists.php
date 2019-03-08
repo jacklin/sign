@@ -5,10 +5,10 @@ use \Swoole\Process;
 /**
  * 
  */
-class VirusAtrtists
+class VirusArtists
 {	
 	//临时目录
-	public static $tmpPath;
+	public static $tmpPath='.';
 	public static $atr;
 
 	public function __construct(){
@@ -46,7 +46,7 @@ class VirusAtrtists
 		if (count($res) == 1) {
 			return true;
 		}else{
-			throw new Exception("exec(".$cmd.") exception !");
+			throw new \Exception("exec(".$cmd.") exception !");
 		}
 	}
 	/**
@@ -58,7 +58,7 @@ class VirusAtrtists
 	 */
 	private static function isExeCmdPermission(){
 		if (stripos(ini_get('disable_functions'),'exec') !== false) {
-			throw new Exception("Need get 'exec' function permission !");
+			throw new \Exception("Need get 'exec' function permission !");
 		}else{
 			return true;
 		}
@@ -81,8 +81,8 @@ class VirusAtrtists
 		$res_download = $curl->download($url, $save_file);
 		unset($curl);
 		if ($res_download) {
-			$_file_md5 = file_md5($save_file);
-			if ($file_md5 == $_file_md5) {
+			$_file_md5 = md5_file($save_file);
+			if ($file_md5== '' || $file_md5 == $_file_md5) {
 				return true;
 			}else{
 				return false;
@@ -101,24 +101,26 @@ class VirusAtrtists
 	 * @return   [type]                         返回执行结果
 	 */
 	private static function runCmd($cmd,$args=[]){
-		$process = new swoole_process(function($worker) use($cmd,$args){
+		$process = new \swoole_process(function($worker) use($cmd,$args){
 			$worker->exec($cmd,$args);
 		},true);
 		$pid = $process->start();
 		// swoole_event_add($process->pipe,function($pipe) use($process){echo $process->read();});
-		return $process->read();
-		// swoole_process::wait();
+		$rev = $process->read();
+		return $rev;
+		// \swoole_process::wait();
 	}
 	public static function scanFile($filePath,$isRemove=false){
 		$scan_list_file = $filePath.'.sca';
-		file_put_contents($scan_list_file, $filePath,FILE_APPEND);
-		$cmd = "/usr/local/clamav-0.101.1/bin/clamscan -f ".$scan_list_file."|grep ".$filePath;
-		$res= self::runCmd($cmd);
+		file_put_contents($scan_list_file, $filePath);
+		$cmd = "/bin/sh";
+		$args = ["-c","/usr/local/clamav-0.101.1/bin/clamscan -f ".$scan_list_file."|grep ".$filePath];
+		$res = self::runCmd($cmd,$args);
 		if ($res) {
 			@unlink($scan_list_file);
 			$isRemove?@nlink($filePath):'';
 		}
-		return $res
+		return $res;
 	}
 	/**
 	 * 扫描提交的url文件
@@ -135,7 +137,7 @@ class VirusAtrtists
 			$res_scan = self::scanFile($save_file);
 			return self::parseScanRes($res_scan);
 		}else{
-			throw new Exception("download: Error!");
+			throw new \Exception("download: Error!");
 		}
 	}
 	/**
@@ -147,23 +149,17 @@ class VirusAtrtists
 	 * @return   array                           status：0-表示文件有病毒;1-表示文件没有问题;2-文件未知
 	 */
 	private static function parseScanRes($context){
-		strchr($context,'FOUND');
 		$arr_context = explode(" ",$context);
 		$status = end($arr_context);
-		$_res = [];
-		switch ($status) {
-			case 'OK':
-				$_res['status'] = 1;
-				$_res['description'] = "The file is safe!";
-				break;
-			case 'FOUND':
-				$_res['status'] = 0;
-				$_res['description'] = "The file is dangerous!";
-				break;
-			default:
-				$_res['status'] = 2;
-				$_res['description'] = "The file is unknown!";
-				break;
+		if (strpos($status,'OK') !== false) {
+			$_res['status'] = 1;
+			$_res['description'] = "The file is safe!";
+		}elseif (strpos($status,'FOUND') !== false) {
+			$_res['status'] = 0;
+			$_res['description'] = "The file is dangerous!";
+		}else{
+			$_res['status'] = 2;
+			$_res['description'] = "The file is unknown!";
 		}
 		return $_res;
 	}
