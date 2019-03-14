@@ -74,7 +74,7 @@ class VirusArtists
 	 * @return   boolean                              
 	 */
 	private static function downFile($url,&$save_file,$file_md5=''){
-		$tmp_file_name = md5(substr(parse_url($url,PHP_URL_PATH),1));//临时文件
+		$tmp_file_name = md5(substr(parse_url($url,PHP_URL_PATH),1).microtime());//临时文件
 		$curl = new curl();
 		$curl->setOpt(CURLOPT_FOLLOWLOCATION, true);
 		$save_file = self::$tmpPath.DIRECTORY_SEPARATOR.$tmp_file_name;
