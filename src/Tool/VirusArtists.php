@@ -75,10 +75,20 @@ class VirusArtists
 	 */
 	private static function downFile($url,&$save_file,$file_md5=''){
 		$tmp_file_name = md5(substr(parse_url($url,PHP_URL_PATH),1).microtime());//临时文件
+		set_time_limit(3600);
 		$curl = new curl();
 		$curl->setOpt(CURLOPT_FOLLOWLOCATION, true);
 		$save_file = self::$tmpPath.DIRECTORY_SEPARATOR.$tmp_file_name;
-		$res_download = $curl->download($url, $save_file);
+		// $res_download = $curl->download($url, $save_file);
+		$curl->setOpt(CURLOPT_WRITEFUNCTION, function ($ch, $string) use ($save_file) {
+			$fp = fopen($save_file,'ab');
+			$length = fwrite($fp, $string);
+			fclose($fp);
+			return $length;
+		});
+		$curl->get($url);
+		$curl->close();
+		$res_download = !$curl->error;
 		unset($curl);
 		if ($res_download) {
 			$_file_md5 = md5_file($save_file);
