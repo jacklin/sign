@@ -29,3 +29,34 @@ $str = "Abc!@#$%Z^&*()_+{}|/`http:\/\/";
 echo $m->encrypt($str);
 echo "<br>";
 echo $m->decrypt($m->encrypt($str));
+
+/**
+ * 遍历目录找查文件
+ */
+require_once("../src/Tool/EgodicFile.php");
+$s = new Tool\EgodicFile();
+$path = "/data/www/7723.com/bbs.7723.com";//查找当前目录下的
+$exclusions=['.','..','.git','.svn'];//过滤不查找目录 
+$s->find($path,['png','jpeg','jpg','bmp'],$exclusions);
+
+/**
+ * openssl加解密类
+ */
+require_once("../src/Tool/OpensslAes.php");
+$str = "test";
+//也可以设置加密密钥最长16位
+$key = '123456';
+Tool\OpensslAes::setKey($key);
+$encrypt_str = Tool\OpensslAes::encrypt($str);
+$decrypt_str = Tool\OpensslAes::decrypt($encrypt_str);
+echo $encrypt_str;
+echo $decrypt_str;
+
+/**
+ * 日志分析
+ */
+require_once("../src/Tool/OpensslAes.php");
+$inputFile = '/usr/local/src/2019-01-30.log';//日志文件
+$outputFile = '/usr/local/src/2019-01-30.csv';//分析结果文件
+LogAnalysis::setFlowLine(4);//设置日志行流量的列数;默认为4
+$res = LogAnalysis::analysisLogFile($inputFile,$outputFile);
