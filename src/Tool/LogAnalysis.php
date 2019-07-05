@@ -65,7 +65,8 @@ class LogAnalysis
 	 * @return   void                        
 	 */
 	private static function dealStr($str){
-		$res = explode(self::$separate,$str);//空格分隔
+        $str = preg_replace(self::$separate,' ',$str);
+		$res = explode(' ',$str);//空格分隔
         $str_time = preg_replace(self::$timeRegx,'',$res[self::$timeLine-1]);
         $date_time = \DateTime::createFromFormat(self::$timeFromat,$str_time,(new \DateTimeZone('Asia/Shanghai')));
         if ($date_time){
@@ -117,8 +118,8 @@ class LogAnalysis
 		    }
 		    ksort(self::$ret);
 		    foreach (self::$ret as $value) {
-		    	$bandwidth = round($value['rate']/1000/128/self::$preTime,2);//单位Mbps
-		    	$flow = round($value['rate']/1000/1000/1024,3);//单位GB
+		    	$bandwidth = round($value['rate']/1000/125/self::$preTime,2);//单位Mbps
+		    	$flow = round($value['rate']/1000/1000/1000,3);//单位GB
 		    	$txt = $value['date']."\t".$flow."GB\t".$bandwidth."Mbps".PHP_EOL;//时间点
 		    	try{
 			    	file_put_contents($outFile,$txt, FILE_APPEND | LOCK_EX);

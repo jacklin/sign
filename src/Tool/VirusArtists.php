@@ -77,6 +77,7 @@ class VirusArtists
 		$tmp_file_name = md5(substr(parse_url($url,PHP_URL_PATH),1).microtime());//临时文件
 		set_time_limit(3600);
 		$curl = new curl();
+		$curl->setTimeout(3600);
 		$curl->setOpt(CURLOPT_FOLLOWLOCATION, true);
 		$save_file = self::$tmpPath.DIRECTORY_SEPARATOR.$tmp_file_name;
 		// $res_download = $curl->download($url, $save_file);
