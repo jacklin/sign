@@ -118,8 +118,8 @@ class VirusArtists
 		$pid = $process->start();
 		// swoole_event_add($process->pipe,function($pipe) use($process){echo $process->read();});
 		$rev = $process->read();
+		\swoole_process::wait();//防止僵尸进程
 		return $rev;
-		// \swoole_process::wait();
 	}
 	public static function scanFile($filePath,$isRemove=false){
 		$scan_list_file = $filePath.'.sca';
