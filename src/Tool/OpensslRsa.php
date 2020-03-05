@@ -7,7 +7,7 @@ namespace Tool;
 class OpensslRsa
 {
 	//生成的密钥位数
-	private static $keySize = 344;
+	private static $keySize = 1024;
 	//默认pkcs1
 	private static $openn_padding = OPENSSL_PKCS1_PADDING;
 	//公钥文件路径，如：/rsa_public_key.pem
