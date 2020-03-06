@@ -91,3 +91,18 @@ echo $encrypt_str.PHP_EOL;
 //私钥解密
 $descrypt_str = OpensslRsa::privateDescrypt($encrypt_str);
 echo $descrypt_str.PHP_EOL;
+//签名及验证
+if (($sign = OpensslRsa::sign($str)) !== false) {
+	echo PHP_EOL;
+	echo $sign . PHP_EOL;
+	$verify_result = OpensslRsa::verify($str,$sign);
+	if ($verify_result == 1) {
+		echo "vild";
+	}elseif ($verify_result == 0) {
+		echo "invild"
+	}else{
+		echo "Error:" . openssl_error_string();
+	}
+}else{
+	throw new \Exception("Error:" . openssl_error_string());
+}

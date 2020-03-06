@@ -76,4 +76,28 @@ class OpensslRsaTest extends TestCase
 		echo $descrypt_str.PHP_EOL;
 		$this->assertEquals($str,$descrypt_str);
 	}
+	/**
+	 * @dataProvider provider
+	 * BaZhang Platform
+	 * @Author   Jacklin@shouyiren.net
+	 * @DateTime 2020-03-06T10:56:36+0800
+	 * @return   [type]                   [description]
+	 */
+	public function testSignVerify(){
+		$func_agrs = func_get_args();
+		$func_agrs = func_get_args();
+		$public_key_file = $func_agrs[0];
+		$private_key_file = $func_agrs[1];
+		$str = $func_agrs[2];
+		OpensslRsa::setPublicKeyFilePath($public_key_file);
+		OpensslRsa::setPrivateKeyFilePath($private_key_file);
+		if (($sign = OpensslRsa::sign($str)) !== false) {
+			echo PHP_EOL;
+			echo $sign . PHP_EOL;
+			$verify_result = OpensslRsa::verify($str,$sign);
+			$this->assertEquals($verify_result,1);
+		}else{
+			throw new \Exception("Error:" . openssl_error_string());
+		}
+	}
 }
