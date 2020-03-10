@@ -119,6 +119,7 @@ class VirusArtists
 		// swoole_event_add($process->pipe,function($pipe) use($process){echo $process->read();});
 		$rev = $process->read();
 		\swoole_process::wait();//防止僵尸进程
+		\swoole_process::kill(posix_getpid(),SIGTERM);//防止僵尸进程
 		return $rev;
 	}
 	public static function scanFile($filePath,$isRemove=false){
