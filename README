@@ -106,3 +106,14 @@ if (($sign = OpensslRsa::sign($str)) !== false) {
 }else{
 	throw new \Exception("Error:" . openssl_error_string());
 }
+
+/**
+ * IP 计算是否在指定IP段范围内
+ * 目录仅支持IPV4
+ */
+require_once("../src/Tool/IpRange.php");
+$ipRange = new Tool\IpRange();
+$ip = '192.168.0.2';//待验证IP
+$ipRange=['192.168.0.1','192.168.0.0/24','127.0.0.1'];//IP/CIDR或者IP指定IP段范围内
+$res = $ipRange->ipv4InRange($ip,$ipRange);
+var_dump($res);//true-在范围内，false-不在范围内
