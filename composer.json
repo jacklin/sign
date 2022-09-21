@@ -13,7 +13,7 @@
         }
     ],
     "require": {
-    	"php": "^5.3.3 || ^7.1",
+    	"php": "^5.3.3 || ^7.1 || ^8.0 || ^8.1",
         "php-curl-class/php-curl-class": "@dev"
     },
     "autoload": {
